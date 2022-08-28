@@ -3,7 +3,6 @@
 import openpyxl
 
 import streamlit as st
-#from PIL import Image
 
 import pandas as pd
 import numpy as np
@@ -14,7 +13,6 @@ from datetime import datetime
 import matplotlib.pyplot as plt
 import matplotlib
 matplotlib.use("Agg")
-#import seaborn as sns
 
 import mpld3
 from mpld3 import plugins
@@ -26,8 +24,6 @@ def main_page():
 
     col1, mid, col2 = st.columns([1,2,20])
     with col1:
-        #st.image("Desktop/Playing with Data/Engagements and Impressions on LI/Interactive-LinkedIn-Engagements-and-Impressions-Dashboard/images/LI logo.png",
-        #    width=100)
         st.image(os.path.abspath("images/LI logo.png"),
             width=100)
     with col2:
@@ -53,9 +49,6 @@ def main_page():
 
     welcome_photo = "people excited.png"
 
-    #st.image("Desktop/Playing with Data/Engagements and Impressions on LI/Interactive-LinkedIn-Engagements-and-Impressions-Dashboard/images/" + welcome_photo,
-    #)
-
     st.image(os.path.abspath("images/" + welcome_photo))
 
     st.markdown("**Track your post performance** over time by analyzing engagements, impressions, and the percent engagement per impression.")
@@ -71,8 +64,6 @@ def page2():
 
     col1, mid, col2 = st.columns([1,2,20])
     with col1:
-        #st.image("Desktop/Playing with Data/Engagements and Impressions on LI/Interactive-LinkedIn-Engagements-and-Impressions-Dashboard/images/LI logo.png",
-        #    width=100)
         st.image(os.path.abspath("images/LI logo.png"),
             width=100)
     with col2:
@@ -96,7 +87,6 @@ def page2():
 
         file1_details = {"filename":file1.name, "filetype":file1.type,
                         "filesize":file1.size}
-	    #st.write(file1_details)
 
     try:
 
@@ -104,23 +94,14 @@ def page2():
 
         df["Date"] = pd.to_datetime(df["Date"],infer_datetime_format = True).dt.date
 
-        #df["Date"] = pd.to_datetime(df["Date"])
-
     except:
 
         df = pd.DataFrame()
 
-        #st.write("broke1")
-
     # code for hardcoded file upload:
-
-    #df = pd.read_excel("Desktop/Playing with Data/Engagements and Impressions on LI/Interactive-LinkedIn-Engagements-and-Impressions-Dashboard/data/2022_ChristianWanser.xlsx")
-
 
 
     # load data
-
-    # code for upload online
 
     file2 = st.sidebar.file_uploader("Upload Shares File",
         type=["csv"],
@@ -145,25 +126,15 @@ def page2():
 
         df2 = pd.DataFrame()
 
-        #st.write("broke2")
-
-
     try:
 
         df2["DateTime"] = df2["Date"]
-
-
-        #df2["Date"] = pd.to_datetime(df2["DateTime"]).dt.date
-
-        #df2["Date"] = pd.to_datetime(df2["DateTime"]).dt.strftime("%m/%d/%Y")
 
         df2["Date"] = pd.to_datetime(df2["Date"],infer_datetime_format = True).dt.date
 
         df2["Time"] = pd.to_datetime(df2["DateTime"], format="%Y-%m-%d %H:%M:%S").dt.time
 
         df2 = df2.rename({'ShareCommentary': 'Post'}, axis=1)
-
-        #st.write(df2)
 
         df = df.merge(df2,on="Date",how="left")
 
@@ -187,11 +158,6 @@ def page2():
         df["ShareLink"] = ["https://www.linkedin.com/feed/" for x in range(0,df.shape[0])]
 
 
-
-        #st.write("broke3")
-
-
-
     # Setting the Plot ;)
     
     st.sidebar.subheader("Setting the Plot")
@@ -208,23 +174,12 @@ def page2():
 
 
         #Date Slider
-        #date_range  = st.sidebar.slider('Select min Date', min_value=np.min(df["Date"]), max_value=np.max(df["Date"]), value = (np.min(df["Date"]),np.max(df["Date"]))) # Getting the input.
-
-
-        #min_date = datetime.strptime('08/01/2021','%m/%d/%Y').date()
-        #max_date = datetime.strptime('08/25/2022','%m/%d/%Y').date()
 
         min_date = min(df["Date"])
         max_date = max(df["Date"])
         date_range = (min(df["Date"]),max(df["Date"]))
 
-        #date_range  = st.sidebar.slider('Select min Date', min_value=min_date, max_value=max_date, value = (min_date,max_date)) # Getting the input.
-
-        #date_range  = st.sidebar.slider('Select min Date', min_value=min_date, max_value=max_date, value = (min_date,max_date)) # Getting the input.
-
         st.markdown("Hover over any point to see details. Click a data point and open your LinkedIn post!")
-   
-        #st.info("blah blah blah")
 
         date_range  = st.slider('Select Date Range', min_value=min_date, max_value=max_date, value = (min_date,max_date)) # Getting the input.
 
@@ -232,26 +187,13 @@ def page2():
 
         df["Percent"] = round(100 * df["Engagements"].div(df["Impressions"]).replace(np.nan, 0),2)
 
-        #st.write(df)
-
-        #st.dataframe(df)
-
-        #st.line_chart(df,x="Date",y=["Engagements","Impressions"])
-
-
-
 
 
         # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
-
-        # adding tooltips (improvements)
-
         source = df
 
         # Create a selection that chooses the nearest point & selects based on x-value
-        #nearest = alt.selection_multi(type='single', nearest=True, on='mouseover',
-        #                        fields=['series'], empty='none')
 
         nearest = alt.selection(type='single', nearest=True, on='mouseover',
                                 fields=['Date'], empty='none')
@@ -262,8 +204,6 @@ def page2():
             alt.X('Date:T', axis=alt.Axis(title=None,format="%m/%d/%Y"))
         )
 
-        # make links open in new tab
-
         line1 = base.mark_line(stroke='#86888A', interpolate='monotone').encode(
             alt.Y('Engagements',
                   axis=alt.Axis(title='Engagements', titleColor='#86888A'))
@@ -273,8 +213,6 @@ def page2():
             alt.Y('Impressions',
                   axis=alt.Axis(title='Impressions', titleColor='#0072b1'))
         )
-
-        #lines = line1 + line2
 
         lines = alt.layer(
             line1,
@@ -413,10 +351,6 @@ def page2():
         st.subheader("Filtered Data Table")
 
 
-
-
-
-
         # data table
 
         colnames = ["Date","Engagements","Impressions","Percent"]
@@ -451,8 +385,6 @@ def page3():
 
     col1, mid, col2 = st.columns([1,2,20])
     with col1:
-        #st.image("Desktop/Playing with Data/Engagements and Impressions on LI/Interactive-LinkedIn-Engagements-and-Impressions-Dashboard/images/LI logo.png",
-        #    width=100)
         st.image(os.path.abspath("images/LI logo.png"),
             width=100)
     with col2:
