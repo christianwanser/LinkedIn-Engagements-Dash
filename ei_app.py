@@ -271,12 +271,6 @@ def page2():
             href='ShareLink:N'
         )
 
-        base2['usermeta'] = {
-            "embedOptions": {
-                'loader': {'target': '_blank'}
-            }
-        }
-
 
 
         # Put the layers into a chart and bind the data
