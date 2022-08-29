@@ -10,12 +10,6 @@ from st_aggrid import AgGrid
 
 from datetime import datetime
 
-import matplotlib.pyplot as plt
-import matplotlib
-matplotlib.use("Agg")
-
-import mpld3
-from mpld3 import plugins
 import streamlit.components.v1 as components
 
 import altair as alt
