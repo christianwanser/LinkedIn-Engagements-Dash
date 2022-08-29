@@ -54,8 +54,6 @@ def main_page():
 
 def page2():
 
-    # sidebar
-
     col1, mid, col2 = st.columns([1,2,20])
     with col1:
         st.image(os.path.abspath("images/LI logo.png"),
@@ -64,6 +62,7 @@ def page2():
         st.write("# LinkedIn Engagement")
 
 
+    # sidebar
 
     # load data
 
